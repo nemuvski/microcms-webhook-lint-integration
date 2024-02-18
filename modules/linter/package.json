@@ -1,0 +1,11 @@
+{
+  "name": "@modules/linter",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "textlint": "^14.0.2",
+    "textlint-plugin-html": "^1.0.0",
+    "textlint-rule-preset-ja-technical-writing": "^10.0.1",
+    "textlint-rule-prh": "^6.0.0"
+  }
+}

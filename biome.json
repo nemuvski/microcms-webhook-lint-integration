@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": ["./reviews/**"],
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "useExhaustiveDependencies": "warn",
+        "noUnusedVariables": "warn"
+      },
+      "style": {
+        "noDefaultExport": "off"
+      },
+      "nursery": {
+        "useExportType": "error",
+        "useImportType": "error",
+        "noUnusedImports": "warn",
+        "noGlobalEval": "error",
+        "noGlobalAssign": "error",
+        "useNodejsImportProtocol": "warn"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "ignore": ["./reviews/**"],
+    "lineEnding": "lf",
+    "lineWidth": 120,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "javascript": {
+    "formatter": {
+      "trailingComma": "es5",
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "jsxQuoteStyle": "single",
+      "arrowParentheses": "always"
+    }
+  }
+}

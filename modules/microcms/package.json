@@ -1,0 +1,8 @@
+{
+  "name": "@modules/microcms",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "microcms-js-sdk": "^2.7.0"
+  }
+}

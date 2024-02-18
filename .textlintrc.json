@@ -1,0 +1,13 @@
+{
+  "plugins": ["html"],
+  "filters": {},
+  "rules": {
+    "prh": {
+      "rulePaths": [
+        "node_modules/prh/prh-rules/media/WEB+DB_PRESS.yml",
+        "modules/linter/prh-dict/sample.yml"
+      ]
+    },
+    "preset-ja-technical-writing": true
+  }
+}

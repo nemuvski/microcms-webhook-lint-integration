@@ -1,0 +1,11 @@
+# 参考 https://github.com/prh/prh/blob/master/misc/prh.yml
+
+version: 1
+
+rules:
+  - expected: jQuery
+    specs:
+      - from: jquery
+        to: jQuery
+      - from: ＪＱＵＥＲＹ
+        to: jQuery

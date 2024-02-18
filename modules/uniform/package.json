@@ -1,0 +1,11 @@
+{
+  "name": "@modules/uniform",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "js-beautify": "^1.15.0"
+  },
+  "devDependencies": {
+    "@types/js-beautify": "^1.14.3"
+  }
+}

@@ -1,0 +1,52 @@
+name: "Open PR draft content"
+
+on:
+  repository_dispatch:
+    types: [linting_draft_content]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+
+jobs:
+  open-pr-draft-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bun version
+        id: bun-version
+        run: |
+          echo "RUNTIME_BUN_VERSION=$(cat .tool-versions | grep '^bun' | sed 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ steps.bun-version.outputs.RUNTIME_BUN_VERSION }}
+      - name: Install dependencies
+        run: bun install --silent --production --frozen-lockfile
+
+      - name: Write contents to file
+        run: bun run main.ts ${{ github.event.client_payload.api }} ${{ github.event.client_payload.id }} ${{ github.event.client_payload.draftKey }}
+        env:
+          MICROCMS_SERVICE_DOMAIN: ${{ vars.MICROCMS_SERVICE_DOMAIN }}
+          MICROCMS_API_KEY: ${{ vars.MICROCMS_API_KEY }}
+
+      # https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          add-paths: |
+            reviews/${{ github.event.client_payload.api }}/${{ github.event.client_payload.id }}/*
+          commit-message: ${{ github.event.client_payload.type }} ${{ github.event.client_payload.api }} ${{ github.event.client_payload.id }}
+          title: "[Review draft content] ${{ github.event.client_payload.type }} ${{ github.event.client_payload.api }} ${{ github.event.client_payload.id }}"
+          labels: review-draft-content,automated-pr
+          branch: review-draft-content/${{ github.event.client_payload.api }}-${{ github.event.client_payload.id }}
+          branch-suffix: timestamp
+          delete-branch: true

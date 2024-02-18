@@ -1,0 +1,49 @@
+name: "Review draft content"
+
+on:
+  pull_request:
+    types:
+      - opened
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+
+jobs:
+  review-draft-content:
+    if: startsWith(github.head_ref, 'review-draft-content/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bun version
+        id: bun-version
+        run: |
+          echo "RUNTIME_BUN_VERSION=$(cat .tool-versions | grep '^bun' | sed 's/[^0-9.]//g')" >> $GITHUB_OUTPUT
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ steps.bun-version.outputs.RUNTIME_BUN_VERSION }}
+      - name: Install dependencies
+        run: bun install --silent --production --frozen-lockfile
+
+      # https://github.com/tsuyoshicho/action-textlint
+      - name: textlint-github-pr-check
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          textlint_flags: "./reviews/**"
+      - name: textlint-github-check
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          textlint_flags: "./reviews/**"
+      - name: textlint-github-pr-review
+        uses: tsuyoshicho/action-textlint@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          textlint_flags: "./reviews/**"
