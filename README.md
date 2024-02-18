@@ -19,6 +19,7 @@
    - Repository variables
      - `MICROCMS_API_KEY` ※2
      - `MICROCMS_SERVICE_DOMAIN`
+4. リポジトリの設定の **Workflow permissions** で、 **Allow GitHub Actions to create and approve pull requests** にチェックを入れて保存
 
 ※1: 自身で作成した GitHub App の値を入れてください。 https://docs.github.com/ja/apps/using-github-apps/about-using-github-apps
 
